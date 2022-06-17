@@ -1,15 +1,12 @@
-import logo from './logo.svg';
+import React from 'react'
 import './App.css';
-//import SearchBar from './client/components/searchBar';
-import HeaderBar from './client/components/headerBar';
+import PageContent from './client/components/pageContent';
 
 function App() {
   return (
-    <div>
       <div>
-        <HeaderBar/>
+        <PageContent/>
       </div>
-    </div>
   );
 }
 
