@@ -10,7 +10,8 @@ import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import ReactPaginate from "react-paginate";
 import '../../pagination.css';
 import { mockData } from '../data/mockData';
-import { productApi, productsPerPage } from '../data/constants' 
+import { productApi, productsPerPage } from '../data/constants';
+import '../../productCard.css'
 
 const ProductDetailsCard = ({selectedBrand}) => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -35,13 +36,15 @@ const ProductDetailsCard = ({selectedBrand}) => {
       justifyContent: "space-between",
       flexWrap: "wrap"
     },
-    discount: {
-      height:"18px",
+    discount : {
+      height:"20px",
       width: "20px",
       background: "lightPink",
-      color:"red"
+      color:"red",
+      margin: "5px"
     },
-    badge: {display: "flex",
+    badge: {
+    display: "flex",
     height: "inherit",
     width: "inherit"
   },
@@ -102,7 +105,7 @@ and pass the data to get it displayed in the cards*/
 
     /*let apiUrl = `${productApi}?searchTerm=null`;
     if(selectedBrand !== "") {
-      apiUrl = `${productApi}?searchTerm=${selectedBrand}&start=0&itemPerPage=${productsPerPage}`
+      apiUrl = `${productApi}?searchTerm=${selectedBrand}&start=${currentPage}&itemPerPage=${productsPerPage}`;
     }
     fetch(apiUrl
     )
@@ -129,27 +132,28 @@ setData(productDetailsArray)
   /* populating fixed number of cards for the selected page */
   
   const currentPageData = data.slice(offset, offset + productsPerPage).map((data) => 
-      <div key={data.id} >
-              <Card sx={{ maxWidth: 345 }}>
+      <div key={data.id} class ="cardStyle" >
+              <Card sx={{ maxWidth: 345 }} raised={true}>
         <CardMedia
           component="img"
           image= {data.images[0]}
           alt="Product Image"
+          class="cardImage"
         />
-        <CardContent>
+        <CardContent class="cardContent">
           <Typography gutterBottom variant="h6" component="div">
            {data.productName}
           </Typography>
-          <Typography color="orange" fontWeight="bold">
+          <Typography color="orange" variant="h8" fontWeight="bold">
             {data.OriginalPrice}
           </Typography>
-          <Typography color="text.secondary" fontSize="small">
+          <Typography color="text.secondary" variant="h9" fontSize="small">
             <s>{data.strikeThroughPrice}</s>
             {data.discount !== 0 &&
             <Button size="small" style={classes.discount}>{data.discount}%</Button>}
           </Typography>
           <Typography fontSize="small">
-            <Icon><img src={data.badgeLink} style={classes.badge}/></Icon>
+            <Icon><img src={data.badgeLink} class="badge"/></Icon>
             {data.location}
           </Typography>
           <Typography>
@@ -159,7 +163,7 @@ setData(productDetailsArray)
             </div>}
           </Typography>
         </CardContent>
-        <CardActions style= {classes.cardAction}>
+        <CardActions style={classes.cardAction}>
           <Button style={classes.buttonStyle} size="large">Add To Cart</Button>
         </CardActions>
       </Card>
@@ -170,7 +174,7 @@ setData(productDetailsArray)
 
     return (
             <div>
-        <div style={classes.content}>
+        <div class="content">
             {currentPageData}
             </div>
             <ReactPaginate

@@ -13,8 +13,6 @@ const classes = {
     container : {
       display: "flex",
       flexDirection: "column",
-      width: "100%",
-      height: "100%",
       padding: "30px 50px 20px 50px",
       boxSizing: "borderBox" 
     },
