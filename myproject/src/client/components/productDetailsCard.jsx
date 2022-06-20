@@ -9,7 +9,6 @@ import { Typography } from '@mui/material';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import ReactPaginate from "react-paginate";
 import '../../pagination.css';
-import { mockData } from '../data/mockData';
 import { productApi, productsPerPage } from '../data/constants';
 import '../../productCard.css'
 
@@ -84,42 +83,39 @@ and pass the data to get it displayed in the cards*/
     
     }
     };
-    /* comment this after resolving CORS Error */
-    mockData.data.products.forEach(data => {
-        const extractedData = createData(data.id,data.merchantCode, data.name, data.status, (data.price.offerPriceDisplay ? data.price.offerPriceDisplay : data.price.priceDisplay), data.price.discount, data.price.strikeThroughPriceDisplay || "", data.images, data.brand, data.review.rating, data.review.count, data.location, data.badge.merchantBadge, data.badge.merchantBadgeUrl);
-        if(!productDetailsArray.includes(extractedData)) {
-       productDetailsArray.push(extractedData);
-        } 
-    });
-    if(selectedBrand !== ""){
-       productDetailsArray.forEach(products => {
-        if(products.brand === selectedBrand) {
-            filteredArray.push(products)
-        }
-      })
-    }
-    (selectedBrand !== "") ? setData(filteredArray) : setData(productDetailsArray)
-  };
-  
-  /* unComment after resolving CORS Error - API Call */
 
-    /*let apiUrl = `${productApi}?searchTerm=null`;
+const handleProductApi = async() => {
+    let apiUrl = `/backend/search/products?searchTerm=null`;
     if(selectedBrand !== "") {
-      apiUrl = `${productApi}?searchTerm=${selectedBrand}&start=${currentPage}&itemPerPage=${productsPerPage}`;
+      apiUrl = `/backend/search/products?searchTerm=${selectedBrand}&start=${currentPage}`;
     }
-    fetch(apiUrl
-    )
-    .then(res => {
-            res.data.products.forEach(data => {
-              const extractedData = createData(data.id,data.merchantCode, data.name, data.status, data.price.offerPriceDisplay || "", data.price.discount, data.price.strikeThroughPriceDisplay || "", data.images, data.brand, data.review.rating, data.review.count, data.location, data.badge.merchantBadge, data.badge.merchantBadgeUrl);
+    try{
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      return data
+    } catch(error) {
+      return Promise.reject(error);
+    }
+  };
+
+    const productApiData = async() => {
+      let productInfo = [];
+      try {
+        productInfo = await handleProductApi();
+        productInfo.data.products.forEach(data => {
+          const extractedData = createData(data.id,data.merchantCode, data.name, data.status, data.price.offerPriceDisplay || "", data.price.discount, data.price.strikeThroughPriceDisplay || "", data.images, data.brand, data.review.rating, data.review.count, data.location, data.badge.merchantBadge, data.badge.merchantBadgeUrl);
         if(!productDetailsArray.includes(extractedData)) {
        productDetailsArray.push(extractedData);
         }
             })
-    }
-    )
-setData(productDetailsArray)
-}; */
+      } catch (error) {
+        return Promise.reject(error);
+      }
+      setData(productDetailsArray);
+    };
+
+  productApiData();
+}; 
 
 /* Implementing Pagination Logic */
 

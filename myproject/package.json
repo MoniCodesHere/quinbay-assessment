@@ -2,6 +2,8 @@
   "name": "myproject",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://www.blibli.com",
+  "homepage": "http://localhost:3000",
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",

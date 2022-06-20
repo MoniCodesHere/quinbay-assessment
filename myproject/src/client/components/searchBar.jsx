@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import AutoComplete from '@mui/material/Autocomplete';
 import { TextField } from '@mui/material';
-import { mockData } from '../data/mockData';
 import SearchIcon from '@mui/icons-material/Search';
 
 
@@ -11,12 +10,26 @@ const SearchBar = ({selectedBrand, setSelectedBrand}) => {
    
     /* Filtering the brands available in the API response, to provide suggestions for user upon searching */
 
-    const dataFromApi = () => { mockData.data.products.forEach(data => {
+    const dataFromApi = async () => { 
+        let apiUrl = `/backend/search/products?searchTerm=null`;
+        if(selectedBrand !== "") {
+          apiUrl = `/backend/search/products?searchTerm=${selectedBrand}`;
+        }
+        try{
+          const response = await fetch(apiUrl);
+          const modifiedResponse = await response.json();
+          modifiedResponse.data.products.forEach(data => {
             if(!brandArray.includes(data.brand)){
+                if(data.brand !== "no brand") {
                 brandArray.push(data.brand);
+                };
             }
             setSearchData(brandArray)
         });
+        } catch(error) {
+          return Promise.reject(error);
+        }
+        
     };
 
     return (
@@ -33,6 +46,9 @@ const SearchBar = ({selectedBrand, setSelectedBrand}) => {
             onChange = {(event, value) => {
                 if(value){
                 setSelectedBrand(value);
+                if(!brandArray.includes(value || value.toLower() || value.toUpper())){
+                brandArray.push(value);
+                }
                 } else {
                     setSelectedBrand("");
                 }
